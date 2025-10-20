@@ -1,0 +1,113 @@
+{
+  "name": "N8N:RESUMEN",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "resumen",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -592,
+        -112
+      ],
+      "id": "52ac08f7-ac0a-48d5-8673-4f8661318f37",
+      "name": "Webhook",
+      "webhookId": "87812595-cc64-4eaa-b748-d9779e36e78c"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=“Resume el siguiente texto en una sola frase, expresando la idea principal con tus propias palabras y sin repetir frases textuales: {{ $json.body.text }}\n"
+            },
+            {
+              "content": "="
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -384,
+        -112
+      ],
+      "id": "f972c76c-91ce-440a-bd19-d264fc08a40b",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "5H5qyomD7YSnlfes",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.content.parts[0].text }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -32,
+        -112
+      ],
+      "id": "1fe49b0b-76bd-4e85-87ef-a7c1b3ec492f",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "053f2203-bd67-4af7-bc8a-20a5e755fc7b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1f17c318a8880966af6302de79ba702de84674d804fcb57efac21afb33900707"
+  },
+  "id": "DDPb1ZLCQ0gUyOiU",
+  "tags": []
+}
